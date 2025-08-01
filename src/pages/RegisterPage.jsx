@@ -51,17 +51,13 @@ function RegisterPage() {
   };
 
   useEffect(() => {
-    if (error) {
-      alert(`Registrasi Gagal: ${error.message}`);
-    }
-
     if (isSuccess) {
       alert("Registrasi Berhasil! Silakan login.");
       navigate("/login");
     }
 
     dispatch(reset());
-  }, [isSuccess, error, navigate, dispatch]);
+  }, [isSuccess, navigate, dispatch]);
 
   return (
     <AuthLayout title="Lengkapi data untuk membuat akun">
