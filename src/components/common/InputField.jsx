@@ -9,7 +9,7 @@ const iconMap = {
   confirm_password: <Lock size={20} className="text-gray-400" />,
 };
 
-const InputField = ({ id, type, placeholder, value, onChange }) => {
+const InputField = ({ id, type, placeholder, value, onChange, error }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -18,9 +18,12 @@ const InputField = ({ id, type, placeholder, value, onChange }) => {
 
   const inputType = type === "password" && isPasswordVisible ? "text" : type;
 
+  const borderColor = error ? "border-red-500" : "border-gray-300";
+  const focusColor = error ? "focus:ring-red-500" : "focus:ring-red-400";
+
   return (
     <div className="relative mb-4">
-      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+      <div className="absolute top-3.5 left-0 flex items-center pl-3 pointer-events-none">
         {iconMap[id]}
       </div>
       <input
@@ -30,7 +33,7 @@ const InputField = ({ id, type, placeholder, value, onChange }) => {
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400"
+        className={`w-full pl-10 pr-10 py-3 border rounded-md focus:outline-none focus:ring-2 ${borderColor} ${focusColor}`}
       />
       {type === "password" && (
         <button
@@ -45,6 +48,7 @@ const InputField = ({ id, type, placeholder, value, onChange }) => {
           )}
         </button>
       )}
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
   );
 };

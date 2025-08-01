@@ -12,6 +12,8 @@ function RegisterPage() {
     confirm_password: "",
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -19,20 +21,56 @@ function RegisterPage() {
     });
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validasi Email
+    if (!form.email) newErrors.email = "Email wajib diisi";
+    else if (!/\S+@\S+\.\S+/.test(form.email))
+      newErrors.email = "Format email tidak valid";
+
+    // Validasi Nama Depan
+    if (!form.first_name) newErrors.first_name = "Nama depan wajib diisi";
+
+    // Validasi Nama Belakang
+    if (!form.last_name) newErrors.last_name = "Nama belakang wajib diisi";
+
+    // Validasi Password
+    if (!form.password) newErrors.password = "Password wajib diisi";
+    else if (form.password.length < 8)
+      newErrors.password = "Password minimal 8 karakter";
+
+    // Validasi Konfirmasi Password
+    if (!form.confirm_password)
+      newErrors.confirm_password = "Konfirmasi password wajib diisi";
+    else if (form.password !== form.confirm_password)
+      newErrors.confirm_password = "Password tidak cocok";
+
+    return newErrors;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(form);
+    const validationErrors = validateForm();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      console.log("Form valid, siap dikirim ke API:", form);
+    } else {
+      console.log("Form tidak valid:", validationErrors);
+    }
   };
 
   return (
     <AuthLayout title="Lengkapi data untuk membuat akun">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <InputField
           id="email"
           type="email"
           placeholder="masukkan email anda"
           value={form.email}
           onChange={handleChange}
+          error={errors.email}
         />
         <InputField
           id="first_name"
@@ -40,6 +78,7 @@ function RegisterPage() {
           placeholder="nama depan"
           value={form.first_name}
           onChange={handleChange}
+          error={errors.first_name}
         />
         <InputField
           id="last_name"
@@ -47,6 +86,7 @@ function RegisterPage() {
           placeholder="nama belakang"
           value={form.last_name}
           onChange={handleChange}
+          error={errors.last_name}
         />
         <InputField
           id="password"
@@ -54,6 +94,7 @@ function RegisterPage() {
           placeholder="buat password"
           value={form.password}
           onChange={handleChange}
+          error={errors.password}
         />
         <InputField
           id="confirm_password"
@@ -61,6 +102,7 @@ function RegisterPage() {
           placeholder="konfirmasi password"
           value={form.confirm_password}
           onChange={handleChange}
+          error={errors.confirm_password}
         />
         <button
           type="submit"
