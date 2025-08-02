@@ -13,6 +13,18 @@ export const topUpBalance = createAsyncThunk(
   }
 );
 
+export const createPayment = createAsyncThunk(
+  "transaction/payment",
+  async (paymentData, { rejectWithValue }) => {
+    try {
+      const response = await api.post("/transaction", paymentData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   isLoading: false,
   isSuccess: false,
@@ -33,6 +45,7 @@ const transactionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // case untuk topup
       .addCase(topUpBalance.pending, (state) => {
         state.isLoading = true;
       })
@@ -42,6 +55,19 @@ const transactionSlice = createSlice({
         state.message = action.payload.message;
       })
       .addCase(topUpBalance.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      //   case untuk pembayaran
+      .addCase(createPayment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createPayment.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.message = action.payload.message;
+      })
+      .addCase(createPayment.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });

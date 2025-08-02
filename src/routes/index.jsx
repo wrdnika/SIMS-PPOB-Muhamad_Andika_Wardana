@@ -7,6 +7,7 @@ import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
 import TopUpPage from "../pages/TopUpPage";
+import PaymentPage from "../pages/PaymentPage";
 
 const MainLayout = () => (
   <>
@@ -36,11 +37,9 @@ const router = createBrowserRouter([
           {
             element: <MainLayout />,
             children: [
-              {
-                path: "",
-                element: <HomePage />,
-              },
+              { path: "", element: <HomePage /> },
               { path: "topup", element: <TopUpPage /> },
+              { path: "payment", element: <PaymentPage /> },
             ],
           },
         ],

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile, fetchBalance } from "../redux/slices/profileSlice";
 import { fetchServices } from "../redux/slices/servicesSlice";
@@ -7,6 +8,7 @@ import BannerSlider from "../components/common/BannerSlider";
 
 function HomePage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isBalanceVisible, setIsBalanceVisible] = useState(false);
 
   const { profile, balance, isLoading } = useSelector((state) => state.profile);
@@ -26,6 +28,10 @@ function HomePage() {
       currency: "IDR",
       minimumFractionDigits: 0,
     }).format(number);
+  };
+
+  const handleServiceClick = (service) => {
+    navigate("/payment", { state: { service } });
   };
 
   return (
@@ -54,8 +60,9 @@ function HomePage() {
       )}
       <div className="grid grid-cols-4 md:grid-cols-7 gap-4">
         {services.map((service) => (
-          <div
+          <button
             key={service.service_code}
+            onClick={() => handleServiceClick(service)}
             className="flex flex-col items-center text-center"
           >
             <img
@@ -64,7 +71,7 @@ function HomePage() {
               className="w-12 h-12 mb-2"
             />
             <p className="text-xs">{service.service_name}</p>
-          </div>
+          </button>
         ))}
       </div>
       <BannerSlider banners={banners} />
