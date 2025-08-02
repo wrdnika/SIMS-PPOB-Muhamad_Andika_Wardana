@@ -9,6 +9,7 @@ import HomePage from "../pages/HomePage";
 import TopUpPage from "../pages/TopUpPage";
 import PaymentPage from "../pages/PaymentPage";
 import TransactionHistoryPage from "../pages/TransactionHistoryPage";
+import ProfilePage from "../pages/ProfilePage";
 
 const MainLayout = () => (
   <>
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
               { path: "topup", element: <TopUpPage /> },
               { path: "payment", element: <PaymentPage /> },
               { path: "transaction", element: <TransactionHistoryPage /> },
+              { path: "akun", element: <ProfilePage /> },
             ],
           },
         ],
