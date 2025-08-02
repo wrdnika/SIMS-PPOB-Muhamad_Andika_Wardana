@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile } from "../../redux/slices/profileSlice";
 import DefaultProfileImage from "/assets/auth/Profile_Photo.png";
 
+/**
+ * Komponen untuk menampilkan gambar profil dan pesan selamat datang untuk pengguna.
+ * Komponen ini mengambil data profil dan dioptimalkan dengan React.memo.
+ */
 const UserProfile = () => {
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.profile);
@@ -43,4 +47,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default memo(UserProfile);

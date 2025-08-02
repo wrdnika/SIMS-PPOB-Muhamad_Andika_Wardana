@@ -1,15 +1,19 @@
+import React, { lazy } from "react";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import App from "../App";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import Navbar from "../components/layouts/Navbar";
 
-import RegisterPage from "../pages/RegisterPage";
-import LoginPage from "../pages/LoginPage";
-import HomePage from "../pages/HomePage";
-import TopUpPage from "../pages/TopUpPage";
-import PaymentPage from "../pages/PaymentPage";
-import TransactionHistoryPage from "../pages/TransactionHistoryPage";
-import ProfilePage from "../pages/ProfilePage";
+// impor halaman dinamis dengan lazy()
+const LoginPage = lazy(() => import("../pages/LoginPage"));
+const RegisterPage = lazy(() => import("../pages/RegisterPage"));
+const HomePage = lazy(() => import("../pages/HomePage"));
+const TopUpPage = lazy(() => import("../pages/TopUpPage"));
+const PaymentPage = lazy(() => import("../pages/PaymentPage"));
+const TransactionHistoryPage = lazy(() =>
+  import("../pages/TransactionHistoryPage")
+);
+const ProfilePage = lazy(() => import("../pages/ProfilePage"));
 
 const MainLayout = () => (
   <>

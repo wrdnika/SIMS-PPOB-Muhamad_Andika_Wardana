@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBalance } from "../../redux/slices/profileSlice";
 import { Eye, EyeOff } from "lucide-react";
 
+/**
+ * Komponen untuk menampilkan saldo pengguna dengan background assets yang sudah di sediakan Nutech.
+ * Komponen ini mengambil data saldon dan dioptimalkan dengan React.memo.
+ */
 const Balance = () => {
   const dispatch = useDispatch();
   const [isBalanceVisible, setIsBalanceVisible] = useState(false);
@@ -35,13 +39,13 @@ const Balance = () => {
       >
         {isBalanceVisible ? "Tutup Saldo" : "Lihat Saldo"}
         {isBalanceVisible ? (
-          <EyeOff size={16} className="mr-2" />
+          <EyeOff size={16} className="ml-2" />
         ) : (
-          <Eye size={16} className="mr-2" />
+          <Eye size={16} className="ml-2" />
         )}
       </button>
     </div>
   );
 };
 
-export default Balance;
+export default memo(Balance);

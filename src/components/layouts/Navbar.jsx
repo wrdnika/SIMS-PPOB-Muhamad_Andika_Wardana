@@ -1,5 +1,10 @@
+import React, { memo } from "react";
 import { NavLink, Link } from "react-router-dom";
 
+/**
+ * Komponen Navbar utama yang menampilkan logo dan link navigasi.
+ * Dioptimalkan dengan React.memo untuk performa maksimal karena tidak memiliki props.
+ */
 const Navbar = () => {
   const activeStyle = {
     color: "#ef4444",
@@ -11,7 +16,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           <Link to="/" className="flex items-center space-x-2">
-            <img src="Logo.png" alt="Logo" className="h-8 w-8" />
+            <img src="/Logo.png" alt="Logo" className="h-8 w-8" />
             <span className="text-xl font-bold">SIMS PPOB</span>
           </Link>
           <div className="flex items-center space-x-8">
@@ -43,4 +48,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default memo(Navbar);

@@ -1,6 +1,12 @@
-import React from "react";
-import SIMSLogo from "/Logo.png";
+import React, { memo } from "react";
 
+/**
+ * Komponen layout dua kolom untuk halaman otentikasi (Login & Registrasi).
+ * Dioptimalkan dengan React.memo untuk mencegah re-render yang tidak perlu.
+ * @param {object} props - Props untuk komponen AuthLayout.
+ * @param {string} props.title - Judul yang akan ditampilkan di atas form.
+ * @param {React.ReactNode} props.children - Konten form yang akan dirender (misalnya, input fields dan tombol).
+ */
 const AuthLayout = ({ title, children }) => {
   return (
     <div className="flex h-screen">
@@ -9,7 +15,7 @@ const AuthLayout = ({ title, children }) => {
         <div className="w-full max-w-md">
           <div className="flex items-center justify-center mb-8">
             <img
-              src={SIMSLogo}
+              src="/Logo.png"
               alt="SIMS PPOB Logo"
               className="h-12 w-12 mr-3"
             />
@@ -20,7 +26,7 @@ const AuthLayout = ({ title, children }) => {
         </div>
       </div>
 
-      {/* Kolom Kanan - Ilustrasi (SUDAH DIPERBAIKI) */}
+      {/* Kolom Kanan */}
       <div className="hidden lg:flex lg:w-1/2 bg-gray-50">
         <img
           src="/assets/auth/IllustrasiAuth.png"
@@ -32,4 +38,4 @@ const AuthLayout = ({ title, children }) => {
   );
 };
 
-export default AuthLayout;
+export default memo(AuthLayout);

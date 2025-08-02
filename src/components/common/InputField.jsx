@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { AtSign, User, Lock, Eye, EyeOff } from "lucide-react";
 
 const iconMap = {
@@ -9,6 +9,17 @@ const iconMap = {
   confirm_password: <Lock size={20} className="text-gray-400" />,
 };
 
+/**
+ * Komponen input field dengan ikon dan penanganan error.
+ * Dioptimalkan dengan React.memo untuk mencegah re-render yang tidak perlu.
+ * @param {object} props - Props untuk komponen InputField.
+ * @param {string} props.id - ID unik untuk input, digunakan untuk `name` dan `key` ikon.
+ * @param {'text'|'email'|'password'} props.type - Tipe dari input.
+ * @param {string} props.placeholder - Teks placeholder untuk input.
+ * @param {string} props.value - Nilai dari input (dikontrol oleh state).
+ * @param {function} props.onChange - Fungsi yang dipanggil saat nilai input berubah.
+ * @param {string} [props.error] - Pesan error yang akan ditampilkan di bawah input (opsional).
+ */
 const InputField = ({ id, type, placeholder, value, onChange, error }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -53,4 +64,4 @@ const InputField = ({ id, type, placeholder, value, onChange, error }) => {
   );
 };
 
-export default InputField;
+export default memo(InputField);

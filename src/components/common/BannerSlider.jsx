@@ -1,9 +1,15 @@
-import React from "react";
+import React, { memo } from "react";
 import Slider from "react-slick";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+/**
+ * Komponen slider untuk menampilkan banner promosi.
+ * Dioptimalkan dengan React.memo untuk mencegah re-render yang tidak perlu.
+ * @param {object} props - Props untuk komponen BannerSlider.
+ * @param {Array<{banner_name: string, banner_image: string}>} props.banners - Array objek banner yang akan ditampilkan.
+ */
 const BannerSlider = ({ banners }) => {
   const settings = {
     dots: false,
@@ -43,4 +49,4 @@ const BannerSlider = ({ banners }) => {
   );
 };
 
-export default BannerSlider;
+export default memo(BannerSlider);
