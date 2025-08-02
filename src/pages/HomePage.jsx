@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile, fetchBalance } from "../redux/slices/profileSlice";
+import { fetchServices } from "../redux/slices/servicesSlice";
 
 function HomePage() {
   const dispatch = useDispatch();
   const [isBalanceVisible, setIsBalanceVisible] = useState(false);
 
   const { profile, balance, isLoading } = useSelector((state) => state.profile);
+  const { services } = useSelector((state) => state.services);
 
   useEffect(() => {
     dispatch(fetchProfile());
     dispatch(fetchBalance());
+    dispatch(fetchServices());
   }, [dispatch]);
 
   const formatRupiah = (number) => {
@@ -45,6 +48,21 @@ function HomePage() {
           </div>
         </div>
       )}
+      <div className="grid grid-cols-4 md:grid-cols-7 gap-4">
+        {services.map((service) => (
+          <div
+            key={service.service_code}
+            className="flex flex-col items-center text-center"
+          >
+            <img
+              src={service.service_icon}
+              alt={service.service_name}
+              className="w-12 h-12 mb-2"
+            />
+            <p className="text-xs">{service.service_name}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
