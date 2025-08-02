@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile, fetchBalance } from "../redux/slices/profileSlice";
 import { fetchServices } from "../redux/slices/servicesSlice";
+import { fetchBanners } from "../redux/slices/bannerSlice";
+import BannerSlider from "../components/common/BannerSlider";
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -9,11 +11,13 @@ function HomePage() {
 
   const { profile, balance, isLoading } = useSelector((state) => state.profile);
   const { services } = useSelector((state) => state.services);
+  const { banners } = useSelector((state) => state.banners);
 
   useEffect(() => {
     dispatch(fetchProfile());
     dispatch(fetchBalance());
     dispatch(fetchServices());
+    dispatch(fetchBanners());
   }, [dispatch]);
 
   const formatRupiah = (number) => {
@@ -63,6 +67,7 @@ function HomePage() {
           </div>
         ))}
       </div>
+      <BannerSlider banners={banners} />
     </div>
   );
 }
