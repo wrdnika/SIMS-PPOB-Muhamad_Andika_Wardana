@@ -5,6 +5,11 @@ import { registerUser, reset } from "../redux/slices/authSlice";
 import AuthLayout from "../components/layouts/AuthLayout";
 import InputField from "../components/common/InputField";
 
+/**
+ * Komponen Halaman Registrasi.
+ * Menangani pendaftaran pengguna baru, termasuk validasi input,
+ * komunikasi dengan API melalui Redux, dan notifikasi hasil.
+ */
 function RegisterPage() {
   const [form, setForm] = useState({
     email: "",
@@ -20,6 +25,10 @@ function RegisterPage() {
 
   const { isLoading, isSuccess, error } = useSelector((state) => state.auth);
 
+  /**
+   * Melakukan validasi pada form registrasi sisi klien.
+   * @returns {object} Objek yang berisi pesan error jika ada.
+   */
   const validateForm = () => {
     const newErrors = {};
     if (!form.email) newErrors.email = "Email wajib diisi";
@@ -35,27 +44,41 @@ function RegisterPage() {
     return newErrors;
   };
 
+  /**
+   * Menangani perubahan pada setiap input field dan memperbarui state form.
+   * @param {React.ChangeEvent<HTMLInputElement>} e - Event dari input field.
+   */
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  /**
+   * Menangani submit form, melakukan validasi, dan men-dispatch action registrasi.
+   * @param {React.FormEvent<HTMLFormElement>} e - Event dari form.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
+      // Hapus confirm_password sebelum mengirim ke API
       const { confirm_password, ...userData } = form;
       dispatch(registerUser(userData));
     }
   };
 
+  /**
+   * Effect hook untuk menangani side-effect setelah proses registrasi.
+   * Menampilkan notifikasi sukses dan me-redirect ke halaman login.
+   */
   useEffect(() => {
     if (isSuccess) {
       alert("Registrasi Berhasil! Silakan login.");
       navigate("/login");
     }
-
+    // Error ditangani oleh notifikasi global di App.jsx
+    // Reset state auth setiap kali ada perubahan status
     dispatch(reset());
   }, [isSuccess, navigate, dispatch]);
 

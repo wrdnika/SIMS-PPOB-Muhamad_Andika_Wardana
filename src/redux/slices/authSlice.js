@@ -1,8 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/api";
 
+// Mengambil token dari localStorage saat aplikasi pertama kali dimuat
 const token = localStorage.getItem("token");
 
+/**
+ * Async Thunk untuk menangani registrasi pengguna.
+ * Melakukan POST request ke endpoint /registration.
+ */
 export const registerUser = createAsyncThunk(
   "auth/register",
   async (userData, { rejectWithValue }) => {
@@ -15,6 +20,11 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+/**
+ * Async Thunk untuk menangani login pengguna.
+ * Melakukan POST request ke endpoint /login.
+ * Jika berhasil, token akan disimpan di localStorage.
+ */
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (userData, { rejectWithValue }) => {
@@ -30,6 +40,10 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+/**
+ * State awal untuk slice otentikasi.
+ * Memeriksa keberadaan token di localStorage untuk menjaga sesi login.
+ */
 const initialState = {
   token: token ? token : null,
   isSuccess: false,
@@ -37,15 +51,25 @@ const initialState = {
   error: null,
 };
 
+/**
+ * Slice Redux yang mengelola semua state yang berhubungan dengan otentikasi,
+ * seperti registrasi, login, dan logout.
+ */
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    /**
+     * Mereset state isSuccess dan error. Berguna setelah notifikasi ditampilkan.
+     */
     reset: (state) => {
       state.isLoading = false;
       state.error = null;
       state.isSuccess = false;
     },
+    /**
+     * Menangani proses logout dengan menghapus token dari localStorage dan state.
+     */
     logout: (state) => {
       localStorage.removeItem("token");
       state.token = null;
@@ -53,11 +77,11 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Cases untuk registerUser
+      // Menangani state untuk action registerUser
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state) => {
         state.isLoading = false;
         state.isSuccess = true;
       })
@@ -65,7 +89,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-      // Cases untuk loginUser
+      // Menangani state untuk action loginUser
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
       })

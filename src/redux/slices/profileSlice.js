@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/api";
 
+/**
+ * Async Thunk untuk mengambil data profil pengguna yang sedang login.
+ * Melakukan GET request ke endpoint /profile.
+ */
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (_, { rejectWithValue }) => {
@@ -13,6 +17,10 @@ export const fetchProfile = createAsyncThunk(
   }
 );
 
+/**
+ * Async Thunk untuk mengambil data saldo pengguna.
+ * Melakukan GET request ke endpoint /balance.
+ */
 export const fetchBalance = createAsyncThunk(
   "profile/fetchBalance",
   async (_, { rejectWithValue }) => {
@@ -25,6 +33,11 @@ export const fetchBalance = createAsyncThunk(
   }
 );
 
+/**
+ * Async Thunk untuk memperbarui data profil pengguna (nama depan & belakang).
+ * Melakukan PUT request ke endpoint /profile/update.
+ * @param {object} profileData - Objek berisi first_name dan last_name.
+ */
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async (profileData, { rejectWithValue }) => {
@@ -37,6 +50,11 @@ export const updateProfile = createAsyncThunk(
   }
 );
 
+/**
+ * Async Thunk untuk memperbarui foto profil pengguna.
+ * Melakukan PUT request ke endpoint /profile/image dengan format multipart/form-data.
+ * @param {File} imageFile - File gambar yang akan diunggah.
+ */
 export const updateProfileImage = createAsyncThunk(
   "profile/updateImage",
   async (imageFile, { rejectWithValue }) => {
@@ -58,6 +76,9 @@ export const updateProfileImage = createAsyncThunk(
   }
 );
 
+/**
+ * State awal untuk slice profil.
+ */
 const initialState = {
   profile: null,
   balance: null,
@@ -65,13 +86,17 @@ const initialState = {
   error: null,
 };
 
+/**
+ * Slice Redux yang mengelola semua state yang berhubungan dengan data pengguna,
+ * seperti profil dan saldo.
+ */
 const profileSlice = createSlice({
   name: "profile",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Case untuk profile
+      // Menangani state untuk action fetchProfile
       .addCase(fetchProfile.pending, (state) => {
         state.isLoading = true;
       })
@@ -83,7 +108,7 @@ const profileSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-      //   Case untuk saldo
+      // Menangani state untuk action fetchBalance
       .addCase(fetchBalance.pending, (state) => {
         state.isLoading = true;
       })
@@ -95,25 +120,26 @@ const profileSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-      //   Case untuk update profile
+      // Menangani state untuk action updateProfile
       .addCase(updateProfile.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.profile = action.payload;
+        state.profile = action.payload; // Perbarui data profil dengan data baru
         alert("Update Pofile berhasil");
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
-      //   case untuk update gambar
+      // Menangani state untuk action updateProfileImage
       .addCase(updateProfileImage.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(updateProfileImage.fulfilled, (state, action) => {
         state.isLoading = false;
+        // Gabungkan data profil yang ada dengan data baru (yang berisi URL gambar baru)
         state.profile = { ...state.profile, ...action.payload };
       })
       .addCase(updateProfileImage.rejected, (state, action) => {

@@ -11,6 +11,11 @@ import InputField from "../components/common/InputField";
 import DefaultProfileImage from "/assets/auth/Profile_Photo.png";
 import { Edit2 } from "lucide-react";
 
+/**
+ * Komponen Halaman Profil Pengguna.
+ * Menampilkan informasi pengguna, dan menyediakan fungsionalitas untuk
+ * mengedit nama, memperbarui foto profil, dan logout.
+ */
 function ProfilePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -18,13 +23,20 @@ function ProfilePage() {
 
   const { profile, isLoading } = useSelector((state) => state.profile);
 
+  // State lokal untuk menangani sumber gambar dan fallback
   const [imageSrc, setImageSrc] = useState(DefaultProfileImage);
+  // State lokal untuk mengontrol mode edit form
   const [isEditing, setIsEditing] = useState(false);
+  // State lokal untuk menampung data yang sedang diedit
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
   });
 
+  /**
+   * Effect hook untuk mengambil data profil saat komponen dimuat
+   * dan mengisi state form saat data profil tersedia.
+   */
   useEffect(() => {
     if (profile) {
       setFormData({
@@ -36,6 +48,10 @@ function ProfilePage() {
     }
   }, [profile, dispatch]);
 
+  /**
+   * Effect hook untuk memperbarui sumber gambar yang ditampilkan
+   * berdasarkan data profil dari Redux.
+   */
   useEffect(() => {
     if (profile?.profile_image) {
       setImageSrc(profile.profile_image);
@@ -44,14 +60,26 @@ function ProfilePage() {
     }
   }, [profile]);
 
+  /**
+   * Menangani error saat gambar dari URL API gagal dimuat,
+   * lalu menampilkan gambar default sebagai fallback.
+   */
   const handleImageError = () => {
     setImageSrc(DefaultProfileImage);
   };
 
+  /**
+   * Memicu dialog pilih file saat ikon edit pada gambar diklik.
+   */
   const handleImageClick = () => {
     fileInputRef.current.click();
   };
 
+  /**
+   * Menangani pemilihan file gambar, melakukan validasi ukuran,
+   * dan men-dispatch action untuk mengunggah gambar.
+   * @param {React.ChangeEvent<HTMLInputElement>} e - Event dari input file.
+   */
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -63,10 +91,16 @@ function ProfilePage() {
     }
   };
 
+  /**
+   * Mengaktifkan mode edit form.
+   */
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
+  /**
+   * Membatalkan mode edit dan mengembalikan data form ke kondisi semula.
+   */
   const handleCancelClick = () => {
     setIsEditing(false);
     setFormData({
@@ -75,10 +109,18 @@ function ProfilePage() {
     });
   };
 
+  /**
+   * Menangani perubahan pada input field nama depan dan belakang.
+   * @param {React.ChangeEvent<HTMLInputElement>} e - Event dari input field.
+   */
   const handleFormChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  /**
+   * Menangani submit form saat menyimpan perubahan profil.
+   * @param {React.FormEvent<HTMLFormElement>} e - Event dari form.
+   */
   const handleSave = (e) => {
     e.preventDefault();
     dispatch(updateProfile(formData)).then((result) => {
@@ -88,6 +130,9 @@ function ProfilePage() {
     });
   };
 
+  /**
+   * Menangani proses logout pengguna.
+   */
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");

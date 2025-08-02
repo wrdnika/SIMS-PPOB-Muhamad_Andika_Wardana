@@ -10,6 +10,11 @@ import Balance from "../components/common/Balance";
 import Modal from "../components/common/Modal";
 import { Wallet } from "lucide-react";
 
+/**
+ * Komponen Halaman Top Up.
+ * Memungkinkan pengguna untuk menambah saldo mereka melalui form input
+ * dengan alur konfirmasi menggunakan modal.
+ */
 function TopUpPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -18,10 +23,15 @@ function TopUpPage() {
     (state) => state.transaction
   );
 
+  // State lokal untuk form dan modal
   const [amount, setAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStatus, setModalStatus] = useState("confirmation");
 
+  /**
+   * Effect hook untuk mengubah status modal menjadi sukses atau error
+   * setelah panggilan API Top Up selesai.
+   */
   useEffect(() => {
     if (isSuccess) {
       setModalStatus("success");
@@ -31,6 +41,11 @@ function TopUpPage() {
     }
   }, [isSuccess, error]);
 
+  /**
+   * Memformat angka menjadi format mata uang Rupiah.
+   * @param {number} number - Angka yang akan diformat.
+   * @returns {string} String dalam format Rupiah.
+   */
   const formatRupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -42,11 +57,19 @@ function TopUpPage() {
   const presetAmounts = [10000, 20000, 50000, 100000, 250000, 500000];
   const isAmountValid = amount >= 10000 && amount <= 1000000;
 
+  /**
+   * Menangani perubahan pada input nominal, hanya memperbolehkan angka.
+   * @param {React.ChangeEvent<HTMLInputElement>} e - Event dari input.
+   */
   const handleAmountChange = (e) => {
     const value = e.target.value.replace(/[^0-9]/g, "");
     setAmount(value);
   };
 
+  /**
+   * Menangani submit form untuk membuka modal konfirmasi.
+   * @param {React.FormEvent<HTMLFormElement>} e - Event dari form.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isAmountValid) {
@@ -55,19 +78,29 @@ function TopUpPage() {
     }
   };
 
+  /**
+   * Menangani konfirmasi dari dalam modal untuk men-dispatch action Top Up.
+   */
   const handleTopUpConfirm = () => {
     const topUpData = { top_up_amount: Number(amount) };
     dispatch(topUpBalance(topUpData));
   };
 
+  /**
+   * Menangani penutupan modal, mereset state, dan mengosongkan form jika sukses.
+   */
   const handleCloseModal = () => {
     setIsModalOpen(false);
     dispatch(resetTransaction());
     if (isSuccess) {
-      setAmount("");
+      setAmount(""); // Kosongkan input setelah sukses
     }
   };
 
+  /**
+   * Helper function untuk menyediakan konten dinamis untuk modal.
+   * @returns {{title: string, message: string}} Objek berisi judul dan pesan.
+   */
   const getModalContent = () => {
     switch (modalStatus) {
       case "success":
@@ -91,11 +124,13 @@ function TopUpPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* BAGIAN HEADER DENGAN KOMPONEN REUSABLE */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <UserProfile />
         <Balance />
       </div>
 
+      {/* FORM TOP UP DENGAN STYLE BARU */}
       <div className="mt-10">
         <p className="text-lg">Silahkan masukan</p>
         <h1 className="text-4xl font-bold mb-8">Nominal Top Up</h1>
@@ -142,6 +177,7 @@ function TopUpPage() {
         </form>
       </div>
 
+      {/* MODAL */}
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}

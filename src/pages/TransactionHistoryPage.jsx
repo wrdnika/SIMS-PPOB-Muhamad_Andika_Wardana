@@ -4,6 +4,10 @@ import { fetchHistory, clearHistory } from "../redux/slices/transactionSlice";
 import UserProfile from "../components/common/UserProfile";
 import Balance from "../components/common/Balance";
 
+/**
+ * Komponen Halaman Riwayat Transaksi.
+ * Menampilkan daftar transaksi pengguna dengan fitur pagination "Show more".
+ */
 function TransactionHistoryPage() {
   const dispatch = useDispatch();
 
@@ -11,6 +15,10 @@ function TransactionHistoryPage() {
     (state) => state.transaction
   );
 
+  /**
+   * Effect hook untuk mengambil data riwayat transaksi saat halaman pertama kali dimuat.
+   * Juga menyertakan fungsi cleanup untuk membersihkan riwayat saat pengguna meninggalkan halaman.
+   */
   useEffect(() => {
     dispatch(fetchHistory({ offset: 0, limit: 5 }));
 
@@ -19,10 +27,18 @@ function TransactionHistoryPage() {
     };
   }, [dispatch]);
 
+  /**
+   * Menangani klik pada tombol "Show more" untuk memuat data transaksi selanjutnya.
+   */
   const handleShowMore = () => {
     dispatch(fetchHistory({ offset, limit: 5 }));
   };
 
+  /**
+   * Memformat angka menjadi format mata uang Rupiah.
+   * @param {number} number - Angka yang akan diformat.
+   * @returns {string} String dalam format Rupiah.
+   */
   const formatRupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -31,6 +47,11 @@ function TransactionHistoryPage() {
     }).format(number || 0);
   };
 
+  /**
+   * Memformat tanggal dari format ISO String menjadi format yang lebih mudah dibaca.
+   * @param {string} isoString - Tanggal dalam format ISO.
+   * @returns {string} String tanggal yang sudah diformat (e.g., "02 Agustus 2025 15:25 WIB").
+   */
   const formatDate = (isoString) => {
     const date = new Date(isoString);
     return (
@@ -82,6 +103,7 @@ function TransactionHistoryPage() {
           ))}
         </div>
       ) : (
+        // Tampilan jika tidak ada data riwayat transaksi
         <div className="text-center py-20">
           <p className="text-gray-500">
             Maaf tidak ada histori transaksi saat ini
@@ -89,6 +111,7 @@ function TransactionHistoryPage() {
         </div>
       )}
 
+      {/* Tombol "Show more" hanya ditampilkan jika masih ada data untuk dimuat */}
       {hasMore && (
         <div className="text-center mt-8">
           <button

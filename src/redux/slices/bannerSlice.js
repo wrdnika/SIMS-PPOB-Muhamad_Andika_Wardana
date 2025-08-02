@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/api";
 
+/**
+ * Async Thunk untuk mengambil data banner promosi.
+ * Melakukan GET request ke endpoint /banner.
+ */
 export const fetchBanners = createAsyncThunk(
   "banners/fetchBanners",
   async (_, { rejectWithValue }) => {
@@ -13,12 +17,18 @@ export const fetchBanners = createAsyncThunk(
   }
 );
 
+/**
+ * State awal untuk slice banner.
+ */
 const initialState = {
   banners: [],
   isLoading: false,
   error: null,
 };
 
+/**
+ * Slice Redux yang mengelola state untuk data banner promosi.
+ */
 const bannerSlice = createSlice({
   name: "banners",
   initialState,

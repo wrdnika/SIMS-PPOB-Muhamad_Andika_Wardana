@@ -1,6 +1,13 @@
 import React from "react";
 import { X } from "lucide-react";
 
+/**
+ * Komponen Notifikasi global untuk menampilkan pesan error atau sukses di pojok layar.
+ * @param {object} props - Props untuk komponen Notifikasi.
+ * @param {string} props.message - Pesan yang akan ditampilkan di dalam notifikasi.
+ * @param {'error'|'success'} [props.type='error'] - Tipe notifikasi untuk menentukan warna (merah untuk error, hijau untuk sukses). Defaultnya 'error'.
+ * @param {function} props.onClose - Fungsi yang akan dipanggil saat tombol tutup (X) diklik.
+ */
 const Notification = ({ message, type = "error", onClose }) => {
   const styles = {
     error: {

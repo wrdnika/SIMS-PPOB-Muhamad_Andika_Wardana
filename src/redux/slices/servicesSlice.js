@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/api";
 
+/**
+ * Async Thunk untuk mengambil daftar semua layanan yang tersedia.
+ * Melakukan GET request ke endpoint /services.
+ */
 export const fetchServices = createAsyncThunk(
   "services/fetchServices",
   async (_, { rejectWithValue }) => {
@@ -13,12 +17,18 @@ export const fetchServices = createAsyncThunk(
   }
 );
 
+/**
+ * State awal untuk slice layanan.
+ */
 const initialState = {
   services: [],
   isLoading: false,
   error: null,
 };
 
+/**
+ * Slice Redux yang mengelola state untuk daftar layanan PPOB.
+ */
 const servicesSlice = createSlice({
   name: "services",
   initialState,

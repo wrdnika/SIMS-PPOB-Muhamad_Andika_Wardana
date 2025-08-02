@@ -7,6 +7,10 @@ import BannerSlider from "../components/common/BannerSlider";
 import Balance from "../components/common/Balance";
 import UserProfile from "../components/common/UserProfile";
 
+/**
+ * Komponen Halaman Utama (Homepage) yang berfungsi sebagai dashboard utama aplikasi.
+ * Menampilkan informasi pengguna, saldo, daftar layanan yang bisa dibeli, dan banner promosi.
+ */
 function HomePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -15,10 +19,16 @@ function HomePage() {
   const { banners } = useSelector((state) => state.banners);
 
   useEffect(() => {
+    // Mengambil data layanan dan banner saat komponen pertama kali dimuat
     dispatch(fetchServices());
     dispatch(fetchBanners());
   }, [dispatch]);
 
+  /**
+   * Menangani klik pada item layanan dan mengarahkan pengguna ke halaman pembayaran
+   * dengan membawa data layanan yang dipilih.
+   * @param {object} service - Objek yang berisi detail layanan yang diklik.
+   */
   const handleServiceClick = (service) => {
     navigate("/payment", { state: { service } });
   };

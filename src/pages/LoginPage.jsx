@@ -5,6 +5,11 @@ import { loginUser, reset } from "../redux/slices/authSlice";
 import AuthLayout from "../components/layouts/AuthLayout";
 import InputField from "../components/common/InputField";
 
+/**
+ * Komponen Halaman Login.
+ * Bertanggung jawab untuk menangani input pengguna, validasi,
+ * otentikasi melalui Redux, dan navigasi setelah login berhasil.
+ */
 function LoginPage() {
   const [form, setForm] = useState({
     email: "",
@@ -19,6 +24,10 @@ function LoginPage() {
     (state) => state.auth
   );
 
+  /**
+   * Melakukan validasi pada form login sisi klien.
+   * @returns {object} Objek yang berisi pesan error kalo ada error.
+   */
   const validateForm = () => {
     const newErrors = {};
     if (!form.email) newErrors.email = "Email wajib diisi";
@@ -26,6 +35,10 @@ function LoginPage() {
     return newErrors;
   };
 
+  /**
+   * Menangani perubahan ke setiap input field dan memperbarui state form.
+   * @param {React.ChangeEvent<HTMLInputElement>} e - Event dari input field.
+   */
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -33,6 +46,10 @@ function LoginPage() {
     });
   };
 
+  /**
+   * Menangani submit form, melakukan validasi, dan men-dispatch action login.
+   * @param {React.FormEvent<HTMLFormElement>} e - Event dari form.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
@@ -43,11 +60,18 @@ function LoginPage() {
     }
   };
 
+  /**
+   * Effect hook untuk menangani side-effect setelah proses login selesai.
+   * Akan me-redirect pengguna ke halaman utama jika login berhasil.
+   */
   useEffect(() => {
+    // Redirect saat login berhasil dan token diterima
     if (isSuccess && token) {
       navigate("/");
     }
 
+    // Reset state auth (isLoading, isSuccess, error)
+    // Dijalankan setiap kali dependensi berubah untuk membersihkan state
     dispatch(reset());
   }, [token, isSuccess, navigate, dispatch]);
 

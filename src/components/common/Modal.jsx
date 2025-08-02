@@ -9,6 +9,16 @@ const icons = {
   ),
 };
 
+/**
+ * Komponen Modal untuk menampilkan dialog konfirmasi, sukses, atau error.
+ * @param {object} props - Props untuk komponen Modal.
+ * @param {boolean} props.isOpen - Mengontrol apakah modal terlihat atau tidak.
+ * @param {function} props.onClose - Fungsi yang akan dipanggil saat modal ditutup (misalnya, saat klik "Batalkan" atau "Kembali ke Beranda").
+ * @param {function} [props.onConfirm] - Fungsi yang akan dipanggil saat tombol konfirmasi utama diklik (misalnya, "Ya, lanjutkan Bayar").
+ * @param {string} props.title - Judul yang ditampilkan di dalam modal.
+ * @param {string} props.message - Pesan atau isi dari modal.
+ * @param {'confirmation'|'success'|'error'} [props.status='confirmation'] - Status modal untuk menentukan ikon dan tombol yang akan ditampilkan. Defaultnya adalah 'confirmation'.
+ */
 const Modal = ({
   isOpen,
   onClose,

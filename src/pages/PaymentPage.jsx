@@ -9,19 +9,30 @@ import UserProfile from "../components/common/UserProfile";
 import Balance from "../components/common/Balance";
 import Modal from "../components/common/Modal";
 
+/**
+ * Komponen Halaman Pembayaran.
+ * Halaman ini diakses setelah pengguna memilih layanan di Homepage.
+ * Menampilkan detail layanan, konfirmasi pembayaran melalui modal, dan menampilkan hasil transaksi.
+ */
 function PaymentPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Mengambil data service yang dikirim dari Halaman Utama melalui 'state' navigasi
   const { service } = location.state || {};
   const { isLoading, isSuccess, error, message } = useSelector(
     (state) => state.transaction
   );
 
+  // State lokal untuk mengontrol visibilitas dan status modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStatus, setModalStatus] = useState("confirmation");
 
+  /**
+   * Effect hook untuk mengubah status modal menjadi sukses atau error
+   * setelah panggilan API pembayaran selesai.
+   */
   useEffect(() => {
     if (isSuccess) {
       setModalStatus("success");
@@ -31,6 +42,11 @@ function PaymentPage() {
     }
   }, [isSuccess, error]);
 
+  /**
+   * Memformat angka menjadi format mata uang Rupiah.
+   * @param {number} number - Angka yang akan diformat.
+   * @returns {string} String dalam format Rupiah (e.g., "Rp 10.000").
+   */
   const formatRupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -39,19 +55,29 @@ function PaymentPage() {
     }).format(number || 0);
   };
 
+  // Pengaman jika halaman diakses langsung tanpa data 'service'
   if (!service) {
     return <Navigate to="/" replace />;
   }
 
+  /**
+   * Menangani klik tombol "Bayar" untuk membuka modal konfirmasi.
+   */
   const handleOpenConfirmation = () => {
     setIsModalOpen(true);
     setModalStatus("confirmation");
   };
 
+  /**
+   * Menangani konfirmasi dari dalam modal untuk men-dispatch action pembayaran.
+   */
   const handlePaymentConfirm = () => {
     dispatch(createPayment({ service_code: service.service_code }));
   };
 
+  /**
+   * Menangani penutupan modal, mereset state transaksi, dan me-redirect jika sukses.
+   */
   const handleCloseModal = () => {
     setIsModalOpen(false);
     dispatch(resetTransaction());
@@ -60,7 +86,11 @@ function PaymentPage() {
     }
   };
 
-  // Fungsi untuk menentukan pesan di modal
+  /**
+   * Helper function untuk menyediakan konten (judul & pesan) yang dinamis
+   * untuk modal berdasarkan statusnya.
+   * @returns {{title: string, message: string}} Objek berisi judul dan pesan untuk modal.
+   */
   const getModalContent = () => {
     switch (modalStatus) {
       case "success":
@@ -118,7 +148,7 @@ function PaymentPage() {
         </div>
       </div>
 
-      {/* MODAL KONFIRMASI, SUKSES, GAGAL  */}
+      {/* MODAL KONFIRMASI, SUKSES, GAGAL */}
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
