@@ -24,7 +24,7 @@ function HomePage() {
   };
 
   return (
-    <div className="container mx-auto py-8 pt-8">
+    <div className="container mx-auto py-8 pt-8 px-4">
       {/* BAGIAN HEADER*/}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <UserProfile />
