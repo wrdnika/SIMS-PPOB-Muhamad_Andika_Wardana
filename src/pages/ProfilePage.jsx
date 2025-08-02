@@ -94,7 +94,7 @@ function ProfilePage() {
   };
 
   return (
-    <div className="container mx-auto flex flex-col items-center justify-center py-10">
+    <div className="container mx-auto flex flex-col items-center justify-center p-2">
       <input
         type="file"
         ref={fileInputRef}
@@ -103,7 +103,7 @@ function ProfilePage() {
         accept="image/jpeg, image/png"
       />
       {/* Gambar dan Nama Profil */}
-      <div className="relative flex flex-col items-center mb-6">
+      <div className="relative flex flex-col items-center mb-2">
         <img
           src={imageSrc}
           onError={handleImageError}
@@ -117,13 +117,13 @@ function ProfilePage() {
           <Edit2 size={18} className="text-gray-700" />
         </button>
       </div>
-      <h1 className="text-2xl font-bold mb-10">
+      <h1 className="text-2xl font-bold mb-2">
         {profile?.first_name} {profile?.last_name}
       </h1>
 
       {/* Form Data Profil */}
       <form onSubmit={handleSave} className="w-full max-w-lg">
-        <div className="mb-6">
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Email
           </label>
@@ -134,7 +134,7 @@ function ProfilePage() {
             disabled
           />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Nama Depan
           </label>
@@ -147,7 +147,7 @@ function ProfilePage() {
             disabled={!isEditing || isLoading}
           />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Nama Belakang
           </label>
