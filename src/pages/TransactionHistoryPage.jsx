@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile, fetchBalance } from "../redux/slices/profileSlice";
 import { fetchHistory, clearHistory } from "../redux/slices/transactionSlice";
+import UserProfile from "../components/common/UserProfile";
+import Balance from "../components/common/Balance";
 
 function TransactionHistoryPage() {
   const dispatch = useDispatch();
-  const [isBalanceVisible, setIsBalanceVisible] = useState(false);
 
-  const { profile, balance } = useSelector((state) => state.profile);
   const { history, isLoading, hasMore, offset } = useSelector(
     (state) => state.transaction
   );
 
   useEffect(() => {
-    dispatch(fetchProfile());
-    dispatch(fetchBalance());
     dispatch(fetchHistory({ offset: 0, limit: 5 }));
 
     return () => {
@@ -31,62 +28,67 @@ function TransactionHistoryPage() {
       style: "currency",
       currency: "IDR",
       minimumFractionDigits: 0,
-    }).format(number);
+    }).format(number || 0);
+  };
+
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return (
+      new Intl.DateTimeFormat("id-ID", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(date) + " WIB"
+    );
   };
 
   return (
-    <div className="container mx-auto p-4">
-      {/* Header Saldo */}
-      {profile && (
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">
-              Selamat datang, {profile.first_name} {profile.last_name}
-            </h1>
-          </div>
-          <div className="bg-red-500 text-white p-6 rounded-lg w-1/3">
-            <p>Saldo anda</p>
-            <h2 className="text-4xl font-bold my-2">
-              {isBalanceVisible ? formatRupiah(balance || 0) : "Rp. •••••••"}
-            </h2>
-            <button
-              onClick={() => setIsBalanceVisible(!isBalanceVisible)}
-              className="text-sm underline cursor-pointer"
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        <UserProfile />
+        <Balance />
+      </div>
+
+      <h2 className="text-xl font-bold mb-6">Semua Transaksi</h2>
+
+      {history.length > 0 ? (
+        <div className="space-y-4">
+          {history.map((transaction) => (
+            <div
+              key={transaction.invoice_number}
+              className="flex justify-between items-center border border-gray-200 p-4 rounded-lg"
             >
-              {isBalanceVisible ? "Tutup Saldo" : "Lihat Saldo"}
-            </button>
-          </div>
+              <div className="flex flex-col">
+                <p
+                  className={`font-bold text-lg ${
+                    transaction.transaction_type === "TOPUP"
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {transaction.transaction_type === "TOPUP" ? "+ " : "- "}
+                  {formatRupiah(transaction.total_amount)}
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  {formatDate(transaction.created_on)}
+                </p>
+              </div>
+              <p className="text-sm font-medium text-gray-700">
+                {transaction.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-20">
+          <p className="text-gray-500">
+            Maaf tidak ada histori transaksi saat ini
+          </p>
         </div>
       )}
 
-      <h2 className="text-xl font-semibold mb-4">Semua Transaksi</h2>
-
-      {/* Daftar Transaksi */}
-      <div className="space-y-4">
-        {history.map((transaction) => (
-          <div
-            key={transaction.invoice_number}
-            className="flex justify-between items-center border p-4 rounded-md"
-          >
-            <div>
-              <p
-                className={`font-bold text-lg ${
-                  transaction.transaction_type === "TOPUP"
-                    ? "text-green-500"
-                    : "text-red-500"
-                }`}
-              >
-                {transaction.transaction_type === "TOPUP" ? "+ " : "- "}
-                {formatRupiah(transaction.total_amount)}
-              </p>
-              <p className="text-sm text-gray-500">{transaction.created_on}</p>
-            </div>
-            <p className="text-sm font-medium">{transaction.description}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Tombol Show More */}
       {hasMore && (
         <div className="text-center mt-8">
           <button

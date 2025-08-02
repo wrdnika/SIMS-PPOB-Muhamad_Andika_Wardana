@@ -1,5 +1,4 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 const Navbar = () => {
   const activeStyle = {
@@ -8,31 +7,32 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white shadow-md z-40">
+    <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
-          <NavLink to="/" className="text-2xl font-bold text-red-500">
-            SIMS PPOB
-          </NavLink>
-          <div className="flex space-x-8">
+          <Link to="/" className="flex items-center space-x-2">
+            <img src="Logo.png" alt="Logo" className="h-8 w-8" />
+            <span className="text-xl font-bold">SIMS PPOB</span>
+          </Link>
+          <div className="flex items-center space-x-8">
             <NavLink
               to="/topup"
               style={({ isActive }) => (isActive ? activeStyle : undefined)}
-              className="text-gray-600 hover:text-red-500"
+              className="font-semibold text-gray-700 hover:text-red-500"
             >
               Top Up
             </NavLink>
             <NavLink
               to="/transaction"
               style={({ isActive }) => (isActive ? activeStyle : undefined)}
-              className="text-gray-600 hover:text-red-500"
+              className="font-semibold text-gray-700 hover:text-red-500"
             >
               Transaction
             </NavLink>
             <NavLink
               to="/akun"
               style={({ isActive }) => (isActive ? activeStyle : undefined)}
-              className="text-gray-600 hover:text-red-500"
+              className="font-semibold text-gray-700 hover:text-red-500"
             >
               Akun
             </NavLink>

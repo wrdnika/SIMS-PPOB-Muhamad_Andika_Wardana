@@ -23,7 +23,6 @@ const Balance = () => {
   return (
     <div
       className="text-white p-6 rounded-xl shadow-md bg-cover bg-center"
-      // Path diubah sesuai dengan lokasi file di folder public
       style={{ backgroundImage: "url('/assets/common/Background_Saldo.png')" }}
     >
       <p className="text-lg">Saldo anda</p>
@@ -34,12 +33,12 @@ const Balance = () => {
         onClick={() => setIsBalanceVisible(!isBalanceVisible)}
         className="text-sm font-semibold mt-2 flex items-center"
       >
+        {isBalanceVisible ? "Tutup Saldo" : "Lihat Saldo"}
         {isBalanceVisible ? (
           <EyeOff size={16} className="mr-2" />
         ) : (
           <Eye size={16} className="mr-2" />
         )}
-        {isBalanceVisible ? "Tutup Saldo" : "Lihat Saldo"}
       </button>
     </div>
   );

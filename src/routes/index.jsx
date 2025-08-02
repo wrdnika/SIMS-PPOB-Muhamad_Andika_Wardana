@@ -14,9 +14,7 @@ import ProfilePage from "../pages/ProfilePage";
 const MainLayout = () => (
   <>
     <Navbar />
-    <div className="pt-20">
-      <Outlet />
-    </div>
+    <Outlet />
   </>
 );
 

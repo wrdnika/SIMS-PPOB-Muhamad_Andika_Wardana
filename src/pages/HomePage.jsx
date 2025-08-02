@@ -1,69 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile, fetchBalance } from "../redux/slices/profileSlice";
 import { fetchServices } from "../redux/slices/servicesSlice";
 import { fetchBanners } from "../redux/slices/bannerSlice";
 import BannerSlider from "../components/common/BannerSlider";
+import Balance from "../components/common/Balance";
+import UserProfile from "../components/common/UserProfile";
 
 function HomePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isBalanceVisible, setIsBalanceVisible] = useState(false);
 
-  const { profile, balance, isLoading } = useSelector((state) => state.profile);
   const { services } = useSelector((state) => state.services);
   const { banners } = useSelector((state) => state.banners);
 
   useEffect(() => {
-    dispatch(fetchProfile());
-    dispatch(fetchBalance());
     dispatch(fetchServices());
     dispatch(fetchBanners());
   }, [dispatch]);
-
-  const formatRupiah = (number) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-    }).format(number);
-  };
 
   const handleServiceClick = (service) => {
     navigate("/payment", { state: { service } });
   };
 
   return (
-    <div className="container mx-auto p-4">
-      {isLoading && <p>Loading...</p>}
-      {profile && (
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">
-              Selamat datang, {profile.first_name} {profile.last_name}
-            </h1>
-          </div>
-          <div className="bg-red-500 text-white p-6 rounded-lg w-1/3">
-            <p>Saldo anda</p>
-            <h2 className="text-4xl font-bold my-2">
-              {isBalanceVisible ? formatRupiah(balance || 0) : "Rp. •••••••"}
-            </h2>
-            <button
-              onClick={() => setIsBalanceVisible(!isBalanceVisible)}
-              className="text-sm underline cursor-pointer"
-            >
-              {isBalanceVisible ? "Tutup Saldo" : "Lihat Saldo"}
-            </button>
-          </div>
-        </div>
-      )}
-      <div className="grid grid-cols-4 md:grid-cols-7 gap-4">
+    <div className="container mx-auto py-8 pt-8">
+      {/* BAGIAN HEADER*/}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        <UserProfile />
+        <Balance />
+      </div>
+
+      {/* GRID LAYANAN */}
+      <div className="flex space-x-6 overflow-x-auto py-4">
         {services.map((service) => (
           <button
             key={service.service_code}
             onClick={() => handleServiceClick(service)}
-            className="flex flex-col items-center text-center"
+            className="flex flex-col items-center text-center flex-shrink-0 w-20"
           >
             <img
               src={service.service_icon}
@@ -74,6 +48,8 @@ function HomePage() {
           </button>
         ))}
       </div>
+
+      {/* --- SLIDER BANNER --- */}
       <BannerSlider banners={banners} />
     </div>
   );
